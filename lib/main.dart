@@ -115,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
             volumeInfo["authors"],
             element["id"],
             volumeInfo["industryIdentifiers"],
+            volumeInfo["publisher"],
             volumeInfo["publishedDate"],
             volumeInfo["imageLinks"],
             volumeInfo
@@ -145,8 +146,12 @@ class _BookDetailRoute extends State<BookDetailRoute> {
     final String _description = bookData.description ?? "No description provided";
     final List<String> _authors = [];
     final NetworkImage _image = NetworkImage(bookData.images?["thumbnail"] ?? "");
+    final String _publisher = bookData.publisher ?? "No publisher provided";
+    final String _date = bookData.publishedDate ?? "no published date provided";
 
     bookData.authors?.forEach((element) { _authors.add(element); });
+
+    Widget label(String label) => Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300));
 
     return Scaffold(
       appBar: AppBar(
@@ -165,19 +170,36 @@ class _BookDetailRoute extends State<BookDetailRoute> {
               const Center(heightFactor: 200, child: Text("No image"),),
             const SizedBox(width: 12,),
 
+            label("Title"),
             Text(_title,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
-            Text((_authors.length == 1) ? "Author" : "Authors",
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
+            label((_authors.length == 1) ? "Author" : "Authors"),
             Text(_authors.join(", "), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),),
             const SizedBox(height: 12,),
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    label("Description"),
+                    Text(_description),
+                    SizedBox(height: 12,),
+                    label("Published by"),
+                    Text("$_publisher; $_date"),
+                  ],
+                )
+              ),
+            )
+
             // CustomScrollView(
             //   slivers: [
             //     SliverFillRemaining(
             //       hasScrollBody: false,
             //       child: Expanded( child :Column(
             //         children: [
-            //           const Text("Description", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),),
+            //
             //           Expanded(child: Text(_description))
             //
             //         ],
@@ -200,6 +222,7 @@ class BookData {
     this.authors,
     this.identifier,
     this.isbns,
+    this.publisher,
     this.publishedDate,
     this.images,
     this.data
@@ -208,6 +231,7 @@ class BookData {
   final String? title;
   final String? description;
   final String? publishedDate;
+  final String? publisher;
   final List<dynamic>? authors;
   final String? identifier;
   final List<dynamic>? isbns;
