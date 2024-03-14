@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 
 import 'bookdata.dart';
+import 'dialogs.dart';
 
 class BookDetailRoute extends StatefulWidget {
   const BookDetailRoute({super.key, required this.bookData});
@@ -27,6 +29,29 @@ class _BookDetailRoute extends State<BookDetailRoute> {
 
     Widget label(String label) => Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300));
 
+    List<Widget> isbns = bookData.isbns?.map((e) => Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(e["identifier"]),
+        if(e["type"] == "ISBN_13")
+          IconButton(onPressed: (){ Dialogs.isbnDialog(context, e); }, icon: const Icon(Icons.qr_code_scanner))
+      ],
+    )).toList() ?? [];
+
+    List<Widget> scrollableViewList = [
+      label("Description"),
+      Text(_description),
+      const SizedBox(height: 12,),
+      label("Published by"),
+      Text("$_publisher; $_date"),
+      const SizedBox(height: 12),
+      label("ISBN Codes")
+    ] + isbns + [
+      const SizedBox(height: 12),
+      label("Google Books ID: ${bookData.identifier}"),
+      const SizedBox(height: 64)
+    ];
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -50,22 +75,14 @@ class _BookDetailRoute extends State<BookDetailRoute> {
               label((_authors.length == 1) ? "Author" : "Authors"),
               Text(_authors.join(", "), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),),
               const SizedBox(height: 12,),
-              SingleChildScrollView(
+              Expanded( child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        label("Description"),
-                        Text(_description),
-                        SizedBox(height: 12,),
-                        label("Published by"),
-                        Text("$_publisher; $_date"),
-                      ],
-                    )
-                ),
-              )
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: scrollableViewList,
+                )
+              )),
             ],
           ),
         )

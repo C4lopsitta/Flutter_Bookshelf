@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'bookcard.dart';
 import 'bookdata.dart';
-import 'bookdetail.dart';
 
 void main() {
   runApp(const MyApp());
@@ -118,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
             volumeInfo["infoLink"],
             volumeInfo["authors"],
             element["id"],
-            volumeInfo["industryIdentifiers"],
+            volumeInfo["industryIdentifiers"].toList(),
             volumeInfo["publisher"],
             volumeInfo["publishedDate"],
             volumeInfo["imageLinks"],
