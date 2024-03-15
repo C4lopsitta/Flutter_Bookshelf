@@ -55,23 +55,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: SearchBar(
                   controller: _searchController,
                   hintText: "Search key...",
                   onSubmitted: (String key) { findBook(); },
                   leading: IconButton(onPressed: findBook, icon: const Icon(Icons.search),),
                 ),
-                    // TextField(
-                    //   controller: _searchController,
-                    //   decoration: const InputDecoration(
-                    //     label: Text("Search..."),
-                    //     hintText: "Book title...",
-                    //     border: OutlineInputBorder(),
-                    //     prefixIcon: Icon(Icons.search, size: 48)
-                    //   ),
-                    // ),
-                    // IconButton(onPressed: findBook, icon: const Icon(Icons.search))
               ),
               if(_result.isNotEmpty && _books != null)
                 Column(
@@ -81,8 +71,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 )
               else
                 if(_hasSearched)
+                  Container(
+                    alignment: Alignment.center,
+                    height: MediaQuery.sizeOf(context).height - 64,
+                    child: const CircularProgressIndicator(),
+                  )
+                else
                   const Center(
-                    child: CircularProgressIndicator(),
+                    child: Text("Start by searching for a book")
                   )
             ],
 
@@ -92,14 +88,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future findBook() async {
+    String key = _searchController.text;
+    if(key.isEmpty) {
+      setState(() {
+        _books = [];
+      });
+      return;
+    }
+
     setState(() { _hasSearched = true; _result = ""; });
     const domain = "www.googleapis.com";
     const path = "/books/v1/volumes";
-
-    String key = _searchController.text;
-    if(key.isEmpty) {
-
-    }
 
     Map<String, dynamic> params = {'q': key};
     Uri uri = Uri.https(domain, path, params);

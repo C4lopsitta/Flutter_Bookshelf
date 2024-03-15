@@ -32,9 +32,13 @@ dependencies:
     sdk: flutter
   http: any
   barcode_widget: any
+  barcode_image: any
   url_launcher: any
   share_plus: any
-  #  fluttertoast: ^8.2.4
+#  image: any
+  flutter_rating_bar: ^4.0.1
+#  flutter_cache_manager: any
+#  fluttertoast: ^8.2.4
 
 
 

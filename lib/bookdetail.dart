@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'bookdata.dart';
 import 'dialogs.dart';
@@ -17,6 +20,8 @@ class _BookDetailRoute extends State<BookDetailRoute> {
   _BookDetailRoute(this.bookData);
   final BookData bookData;
 
+  Widget label(String label) => Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300));
+
   @override
   Widget build(BuildContext context) {
     final String _title = bookData.title ?? "";
@@ -28,7 +33,6 @@ class _BookDetailRoute extends State<BookDetailRoute> {
 
     bookData.authors?.forEach((element) { _authors.add(element); });
 
-    Widget label(String label) => Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300));
 
     List<Widget> isbns = bookData.isbns?.map((e) => Row(
       mainAxisSize: MainAxisSize.min,
@@ -39,7 +43,9 @@ class _BookDetailRoute extends State<BookDetailRoute> {
       ],
     )).toList() ?? [];
 
-    List<Widget> scrollableViewList = [
+    List<Widget> scrollableViewList =
+    _buildRatingItem(bookData.data["averageRating"] ?? -1) +
+    [
       label("Description"),
       Text(_description),
       const SizedBox(height: 12,),
@@ -52,12 +58,6 @@ class _BookDetailRoute extends State<BookDetailRoute> {
       label("Google Books ID: ${bookData.identifier}"),
       const SizedBox(height: 64)
     ];
-
-    Future<void> _launchURL(Uri url) async {
-      if(!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-        throw Exception("Failed to launch url");
-      }
-    }
 
     void _shareBookDetails() {
       Share.share("$_title\n${_authors.join(", ")}\n${bookData.url}");
@@ -108,5 +108,25 @@ class _BookDetailRoute extends State<BookDetailRoute> {
           ),
         )
     );
+  }
+
+  List<Widget> _buildRatingItem(double rating) {
+    if(rating < 0) return [];
+    return [
+      label("Rating"),
+      RatingBarIndicator(
+        rating: rating % 5,
+        itemBuilder: (context, index) => const Icon(Icons.star, color: Colors.amber),
+        itemCount: 5,
+        itemSize: 24,
+        direction: Axis.horizontal,
+      ),
+    ];
+  }
+
+  Future<void> _launchURL(Uri url) async {
+    if(!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception("Failed to launch url");
+    }
   }
 }
