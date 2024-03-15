@@ -32,6 +32,8 @@ dependencies:
     sdk: flutter
   http: any
   barcode_widget: any
+  url_launcher: any
+  share_plus: any
   #  fluttertoast: ^8.2.4
 
 

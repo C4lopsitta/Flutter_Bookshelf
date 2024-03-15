@@ -56,18 +56,22 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Padding(
                 padding: EdgeInsets.all(12),
-                child: TextField(
+                child: SearchBar(
                   controller: _searchController,
-                  decoration: InputDecoration(
-                    label: const Text("Search Key"),
-                    hintText: "Book title...",
-                    border: const OutlineInputBorder(),
-                    suffix: IconButton(
-                      onPressed: findBook,
-                      icon: const Icon(Icons.search),
-                    )
-                  ),
+                  hintText: "Search key...",
+                  onSubmitted: (String key) { findBook(); },
+                  leading: IconButton(onPressed: findBook, icon: const Icon(Icons.search),),
                 ),
+                    // TextField(
+                    //   controller: _searchController,
+                    //   decoration: const InputDecoration(
+                    //     label: Text("Search..."),
+                    //     hintText: "Book title...",
+                    //     border: OutlineInputBorder(),
+                    //     prefixIcon: Icon(Icons.search, size: 48)
+                    //   ),
+                    // ),
+                    // IconButton(onPressed: findBook, icon: const Icon(Icons.search))
               ),
               if(_result.isNotEmpty && _books != null)
                 Column(
@@ -78,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
               else
                 if(_hasSearched)
                   const Center(
-                    heightFactor: 1,
                     child: CircularProgressIndicator(),
                   )
             ],
@@ -94,6 +97,9 @@ class _MyHomePageState extends State<MyHomePage> {
     const path = "/books/v1/volumes";
 
     String key = _searchController.text;
+    if(key.isEmpty) {
+
+    }
 
     Map<String, dynamic> params = {'q': key};
     Uri uri = Uri.https(domain, path, params);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:barcode_widget/barcode_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'bookdata.dart';
 import 'dialogs.dart';
@@ -52,10 +53,30 @@ class _BookDetailRoute extends State<BookDetailRoute> {
       const SizedBox(height: 64)
     ];
 
+    Future<void> _launchURL(Uri url) async {
+      if(!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+        throw Exception("Failed to launch url");
+      }
+    }
+
+    void _shareBookDetails() {
+      Share.share("$_title\n${_authors.join(", ")}\n${bookData.url}");
+    }
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(bookData.title ?? "Invalid book title"),
+          actions: [
+            if(bookData.url != null)
+              IconButton(onPressed: (){
+                _launchURL(Uri.parse(bookData.url ?? ""));
+              }, icon: const Icon(Icons.info)),
+            if(bookData.url != null)
+              IconButton(onPressed: (){
+                _shareBookDetails();
+              }, icon: const Icon(Icons.share))
+          ],
         ),
         body: Padding(
           padding: EdgeInsets.all(12),
