@@ -44,8 +44,16 @@ class _BookDetailRoute extends State<BookDetailRoute> {
     )).toList() ?? [];
 
     List<Widget> scrollableViewList =
-    _buildRatingItem(bookData.data["averageRating"] ?? -1) +
+    _buildRatingItem((bookData.data["averageRating"] ?? -1) * 1.0) +
     [
+      if((bookData.data["maturityRating"] ?? "") == "MATURE")
+        const Row(children:[
+          SizedBox(width: 8),
+          Icon(Icons.explicit, size: 16,),
+          SizedBox(width: 4),
+          Text("The book is explicit", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300))
+        ]
+      ),
       label("Description"),
       Text(_description),
       const SizedBox(height: 12,),
@@ -93,6 +101,7 @@ class _BookDetailRoute extends State<BookDetailRoute> {
               label("Title"),
               Text(_title,
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
+
               label((_authors.length == 1) ? "Author" : "Authors"),
               Text(_authors.join(", "), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),),
               const SizedBox(height: 12,),
@@ -115,7 +124,7 @@ class _BookDetailRoute extends State<BookDetailRoute> {
     return [
       label("Rating"),
       RatingBarIndicator(
-        rating: rating % 5,
+        rating: rating,
         itemBuilder: (context, index) => const Icon(Icons.star, color: Colors.amber),
         itemCount: 5,
         itemSize: 24,

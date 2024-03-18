@@ -122,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
             volumeInfo["infoLink"],
             volumeInfo["authors"],
             element["id"],
-            volumeInfo["industryIdentifiers"].toList(),
+            volumeInfo["industryIdentifiers"]?.toList() ?? [],
             volumeInfo["publisher"],
             volumeInfo["publishedDate"],
             volumeInfo["imageLinks"],
