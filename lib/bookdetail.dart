@@ -46,6 +46,9 @@ class _BookDetailRoute extends State<BookDetailRoute> {
     List<Widget> scrollableViewList =
     _buildRatingItem((bookData.data["averageRating"] ?? -1) * 1.0) +
     [
+      label((_authors.length == 1) ? "Author" : "Authors"),
+      Text(_authors.join(", "), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),),
+      const SizedBox(height: 12),
       if((bookData.data["maturityRating"] ?? "") == "MATURE")
         const Row(children:[
           SizedBox(width: 8),
@@ -57,6 +60,10 @@ class _BookDetailRoute extends State<BookDetailRoute> {
       label("Description"),
       Text(_description),
       const SizedBox(height: 12,),
+    ] + _buildGenreChips((bookData.data["categories"] ?? []).toList()) + [
+      if((bookData.data["pageCount"] ?? -1) >= 0)
+        Text("${bookData.data["pageCount"]} Pages"),
+      const SizedBox(height: 12),
       label("Published by"),
       Text("$_publisher; $_date"),
       const SizedBox(height: 12),
@@ -87,24 +94,19 @@ class _BookDetailRoute extends State<BookDetailRoute> {
           ],
         ),
         body: Padding(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if(_image.url.isNotEmpty)
-                Image(image: _image)
-              else
-                const Center(heightFactor: 200, child: Text("No image"),),
+                Image(image: _image),
               const SizedBox(width: 12,),
 
               label("Title"),
               Text(_title,
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
 
-              label((_authors.length == 1) ? "Author" : "Authors"),
-              Text(_authors.join(", "), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),),
-              const SizedBox(height: 12,),
               Expanded( child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
@@ -137,5 +139,20 @@ class _BookDetailRoute extends State<BookDetailRoute> {
     if(!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       throw Exception("Failed to launch url");
     }
+  }
+
+  List<Widget> _buildGenreChips(List<dynamic> genres) {
+    if(genres.isEmpty) return [];
+    return [
+      label("Genres"),
+      SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: genres.map((genre) {
+          return Chip(label: Text(genre));
+        }).toList(),
+      ),),
+      const SizedBox(height: 12)
+    ];
   }
 }

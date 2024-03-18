@@ -32,8 +32,16 @@ class _BookCard extends State<BookCard> {
           margin: EdgeInsets.all(12),
           child: Row(
             children: [
-              Image(image: image, height: MediaQuery.sizeOf(context).height * 0.2),
-              SizedBox(width: 12,),
+              if(image.url.isNotEmpty)
+                Image(image: image, height: MediaQuery.sizeOf(context).height * 0.2)
+              else
+                SizedBox(
+                  height: MediaQuery.sizeOf(context).height * 0.2,
+                  child: const Center(
+                    child: Text("No thumbnail")
+                  )
+                ),
+              const SizedBox(width: 12),
               Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
