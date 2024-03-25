@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
@@ -43,11 +41,18 @@ class _BookDetailRoute extends State<BookDetailRoute> {
       ],
     )).toList() ?? [];
 
+
+
+
+
     List<Widget> scrollableViewList =
     _buildRatingItem((bookData.data["averageRating"] ?? -1) * 1.0) +
     [
       label((_authors.length == 1) ? "Author" : "Authors"),
       Text(_authors.join(", "), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),),
+
+
+
       const SizedBox(height: 12),
       if((bookData.data["maturityRating"] ?? "") == "MATURE")
         const Row(children:[
@@ -57,10 +62,15 @@ class _BookDetailRoute extends State<BookDetailRoute> {
           Text("The book is explicit", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300))
         ]
       ),
+
+
       label("Description"),
       Text(_description),
       const SizedBox(height: 12,),
+
+
     ] + _buildGenreChips((bookData.data["categories"] ?? []).toList()) + [
+
       if((bookData.data["pageCount"] ?? -1) >= 0)
         Text("${bookData.data["pageCount"]} Pages"),
       const SizedBox(height: 12),

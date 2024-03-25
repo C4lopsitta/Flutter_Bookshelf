@@ -1,8 +1,6 @@
 import 'package:barcode_image/barcode_image.dart';
 import 'package:flutter/material.dart';
 import 'package:barcode_widget/barcode_widget.dart';
-import 'package:image/image.dart' as img;
-import 'package:share_plus/share_plus.dart';
 
 class Dialogs {
   static Future<void> isbnDialog(BuildContext context,

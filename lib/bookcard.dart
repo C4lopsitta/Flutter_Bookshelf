@@ -29,7 +29,7 @@ class _BookCard extends State<BookCard> {
           Navigator.push(context, MaterialPageRoute(builder: (context) => BookDetailRoute(bookData: bookData)));
         },
         child : Card(
-          margin: EdgeInsets.all(12),
+          margin: const EdgeInsets.all(12),
           child: Row(
             children: [
               if(image.url.isNotEmpty)
@@ -54,7 +54,7 @@ class _BookCard extends State<BookCard> {
                       ),
                       Text(authors,
                           softWrap: true,
-                          style: TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 12),
                           overflow: TextOverflow.ellipsis
                       )
                     ],
