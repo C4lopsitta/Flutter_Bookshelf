@@ -45,7 +45,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int _alreadyReadBooks = 0;
   bool _hasSearched = false;
   List<BookData>? _books;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  final ScrollController _mainScrollViewController = ScrollController();
 
   @override
   void initState() {
@@ -60,13 +61,10 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
         actions: [
-          IconButton(
-            onPressed: (){},
-            icon: const Icon(Icons.vertical_align_top_outlined)
-          )
         ],
       ),
       body: SingleChildScrollView(
+        controller: _mainScrollViewController,
         child: Column(
             children: [
               Padding(
@@ -96,7 +94,13 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
 
           ),
-        )
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _mainScrollViewController.animateTo(0, duration: Durations.medium3, curve: Curves.easeIn);
+          },
+          child: const Icon(Icons.keyboard_arrow_up_rounded),
+        ),
     );
   }
 
