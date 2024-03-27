@@ -1,5 +1,5 @@
 class BookData {
-  const BookData(
+  BookData(
       this.title,
       this.description,
       this.url,
@@ -22,4 +22,5 @@ class BookData {
   final String? url;
   final Map<String, dynamic>? images;
   final Map<String, dynamic> data;
+  bool shouldLoadMoreBooks = false;
 }
